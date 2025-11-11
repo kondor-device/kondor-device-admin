@@ -105,6 +105,13 @@ export const item = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'topSales',
+      title: 'Топ продажів',
+      type: 'boolean',
+      description: 'Позначає товар як топ продажів для відображення на вітрині.',
+      initialValue: false,
+    }),
+    defineField({
       name: 'showonaddons',
       title: 'Показувати як аксесуар',
       type: 'boolean',
@@ -118,7 +125,7 @@ export const item = defineType({
     }),
     defineField({
       name: 'preorder',
-      title: 'Доступний передзамовлення',
+      title: 'Доступний до передзамовлення',
       type: 'boolean',
       initialValue: false,
     }),
