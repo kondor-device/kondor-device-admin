@@ -1,3 +1,4 @@
+import {colorInput} from '@sanity/color-input'
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
@@ -10,7 +11,7 @@ export default defineConfig({
   projectId: 'qmszlzqu',
   dataset: 'production',
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [structureTool(), visionTool(), colorInput()],
 
   schema: {
     types: schemaTypes,

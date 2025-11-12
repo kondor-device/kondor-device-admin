@@ -105,11 +105,12 @@ export const item = defineType({
       initialValue: false,
     }),
     defineField({
-      name: 'topSales',
-      title: 'Топ продажів',
-      type: 'boolean',
-      description: 'Позначає товар як топ продажів для відображення на вітрині.',
-      initialValue: false,
+      name: 'badge',
+      title: 'Бейдж',
+      type: 'reference',
+      to: [{type: 'badge'}],
+      description: 'Оберіть один із заздалегідь створених бейджів для картки товару.',
+      weak: true,
     }),
     defineField({
       name: 'showonaddons',
