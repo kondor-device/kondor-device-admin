@@ -54,6 +54,68 @@ export const item = defineType({
       validation: (rule) => rule.required().regex(/^[a-z0-9-]+$/),
     }),
     defineField({
+      name: 'coloropts',
+      title: 'Колірні варіанти',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          name: 'colorOption',
+          title: 'Варіант',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'code',
+              title: 'Код',
+              type: 'string',
+              description: 'Внутрішній код варіанту.',
+            }),
+            defineField({
+              name: 'color',
+              title: 'Назва кольору',
+              type: 'string',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'colorset',
+              title: 'Набір кольорів',
+              type: 'object',
+              fields: [
+                defineField({
+                  name: 'hex',
+                  title: 'Колір (через пікер)',
+                  type: 'color',
+                  options: {disableAlpha: true},
+                  description:
+                    'Оберіть колір варіанту через пікер. Для старих даних виконайте міграцію з поля HEX.',
+                  validation: (rule) => rule.required(),
+                }),
+              ],
+            }),
+            defineField({
+              name: 'photos',
+              title: 'Фото',
+              type: 'array',
+              of: [
+                defineArrayMember({
+                  title: 'Фото',
+                  type: 'image',
+                  options: {hotspot: true},
+                  fields: [
+                    defineField({
+                      name: 'alt',
+                      title: 'Alt-текст',
+                      type: 'string',
+                      description: 'Опис фото українською мовою.',
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    }),
+    defineField({
       name: 'price',
       title: 'Ціна',
       type: 'number',
@@ -157,67 +219,6 @@ export const item = defineType({
               title: 'Значення',
               type: 'string',
               validation: (rule) => rule.required(),
-            }),
-          ],
-        }),
-      ],
-    }),
-    defineField({
-      name: 'coloropts',
-      title: 'Колірні варіанти',
-      type: 'array',
-      of: [
-        defineArrayMember({
-          name: 'colorOption',
-          title: 'Варіант',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'code',
-              title: 'Код',
-              type: 'string',
-              description: 'Внутрішній код варіанту.',
-            }),
-            defineField({
-              name: 'color',
-              title: 'Назва кольору',
-              type: 'string',
-              validation: (rule) => rule.required(),
-            }),
-            defineField({
-              name: 'colorset',
-              title: 'Набір кольорів',
-              type: 'object',
-              fields: [
-                defineField({
-                  name: 'hex',
-                  title: 'HEX-код',
-                  type: 'string',
-                  description: 'Наприклад, #FFFFFF.',
-                  validation: (rule) =>
-                    rule.regex(/^#([0-9a-fA-F]{3}){1,2}$/).warning('Використовуйте формат HEX.'),
-                }),
-              ],
-            }),
-            defineField({
-              name: 'photos',
-              title: 'Фото',
-              type: 'array',
-              of: [
-                defineArrayMember({
-                  title: 'Фото',
-                  type: 'image',
-                  options: {hotspot: true},
-                  fields: [
-                    defineField({
-                      name: 'alt',
-                      title: 'Alt-текст',
-                      type: 'string',
-                      description: 'Опис фото українською мовою.',
-                    }),
-                  ],
-                }),
-              ],
             }),
           ],
         }),
