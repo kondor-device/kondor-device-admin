@@ -205,7 +205,6 @@ export const item = defineType({
               type: 'array',
               of: [
                 defineArrayMember({
-                  name: 'photo',
                   title: 'Фото',
                   type: 'image',
                   options: {hotspot: true},
