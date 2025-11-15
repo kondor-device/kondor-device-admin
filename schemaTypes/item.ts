@@ -187,6 +187,15 @@ export const item = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'order',
+      title: 'Порядок відображення на головній',
+      type: 'number',
+      description:
+        'Встановіть порядок відображення товару на головній сторінці. Менше значення = вище на сторінці.',
+      validation: (rule) => rule.min(0).integer(),
+      hidden: ({parent}) => !parent?.showonmain,
+    }),
+    defineField({
       name: 'preorder',
       title: 'Доступний до передзамовлення',
       type: 'boolean',
