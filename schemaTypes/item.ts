@@ -110,6 +110,7 @@ export const item = defineType({
                   ],
                 }),
               ],
+              validation: (Rule) => Rule.min(1).error('Потрібно додати хоча б одне фото'),
             }),
           ],
         }),
