@@ -201,12 +201,22 @@ export const item = defineType({
       title: 'Доступний до передзамовлення',
       type: 'boolean',
       initialValue: false,
+      hidden: ({parent}) => Boolean(parent?.outOfStock),
     }),
     defineField({
       name: 'preordertext',
       title: 'Текст передзамовлення',
       type: 'string',
       description: 'Пояснення для користувача, якщо товар доступний лише по передзамовленню.',
+      hidden: ({parent}) => Boolean(parent?.outOfStock) || !parent?.preorder,
+    }),
+    defineField({
+      name: 'outOfStock',
+      title: 'Немає в наявності',
+      type: 'boolean',
+      description:
+        'Увімкніть, якщо товару немає в наявності і на сайті. Кнопка "Оформити замовлення" стане недоступною, товар отримає статус "Немає в наявності" на сайті та у товарних фідах (Meta, Rozetka тощо). Має пріоритет над "Доступний до передзамовлення".',
+      initialValue: false,
     }),
     defineField({
       name: 'chars',
