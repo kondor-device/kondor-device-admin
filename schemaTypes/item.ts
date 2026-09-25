@@ -70,6 +70,12 @@ export const item = defineType({
           type: 'string',
           description: 'Опис зображення українською мовою.',
         }),
+        defineRuField({
+          name: 'altRu',
+          title: 'Alt-текст (RU)',
+          type: 'string',
+          ukField: 'alt',
+        }),
       ],
     }),
     defineField({
@@ -138,6 +144,12 @@ export const item = defineType({
                       title: 'Alt-текст',
                       type: 'string',
                       description: 'Опис фото українською мовою.',
+                    }),
+                    defineRuField({
+                      name: 'altRu',
+                      title: 'Alt-текст (RU)',
+                      type: 'string',
+                      ukField: 'alt',
                     }),
                   ],
                 }),
@@ -338,6 +350,12 @@ export const item = defineType({
                   title: 'Alt-текст',
                   type: 'string',
                   description: 'Опис іконки українською мовою.',
+                }),
+                defineRuField({
+                  name: 'altRu',
+                  title: 'Alt-текст (RU)',
+                  type: 'string',
+                  ukField: 'alt',
                 }),
               ],
             }),

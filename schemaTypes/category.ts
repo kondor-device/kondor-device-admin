@@ -45,6 +45,12 @@ export const category = defineType({
           type: 'string',
           description: 'Короткий опис зображення українською мовою.',
         }),
+        defineRuField({
+          name: 'altRu',
+          title: 'Alt-текст (RU)',
+          type: 'string',
+          ukField: 'alt',
+        }),
       ],
     }),
     defineField({
