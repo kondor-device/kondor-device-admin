@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {defineRuField} from './ruField'
 
 export const badge = defineType({
   name: 'badge',
@@ -11,6 +12,12 @@ export const badge = defineType({
       type: 'string',
       description: 'Короткий напис, який відображається на картці товару.',
       validation: (rule) => rule.required().max(30).warning('Рекомендується не більше 30 символів'),
+    }),
+    defineRuField({
+      name: 'textRu',
+      title: 'Текст бейджа (RU)',
+      type: 'string',
+      ukField: 'text',
     }),
     defineField({
       name: 'backgroundColor',

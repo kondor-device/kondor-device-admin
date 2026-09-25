@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {defineRuField} from './ruField'
 
 export const category = defineType({
   name: 'category',
@@ -10,6 +11,12 @@ export const category = defineType({
       title: 'Назва категорії',
       type: 'string',
       validation: (rule) => rule.required().min(1),
+    }),
+    defineRuField({
+      name: 'nameRu',
+      title: 'Назва категорії (RU)',
+      type: 'string',
+      ukField: 'name',
     }),
     defineField({
       name: 'slug',
