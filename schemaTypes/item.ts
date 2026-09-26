@@ -1,4 +1,5 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import {defineRuField} from './ruField'
 
 export const item = defineType({
   name: 'item',
@@ -12,11 +13,23 @@ export const item = defineType({
       description: 'Використовується для групування товарів. Має співпадати з полем у Dato CMS.',
       validation: (rule) => rule.required(),
     }),
+    defineRuField({
+      name: 'generalnameRu',
+      title: 'Загальна назва (RU)',
+      type: 'string',
+      ukField: 'generalname',
+    }),
     defineField({
       name: 'name',
       title: 'Назва товару',
       type: 'string',
       validation: (rule) => rule.required(),
+    }),
+    defineRuField({
+      name: 'nameRu',
+      title: 'Назва товару (RU)',
+      type: 'string',
+      ukField: 'name',
     }),
     defineField({
       name: 'seoTitle',
@@ -24,12 +37,25 @@ export const item = defineType({
       type: 'string',
       description: 'Мета-заголовок для сторінки товару.',
     }),
+    defineRuField({
+      name: 'seoTitleRu',
+      title: 'SEO Title (RU)',
+      type: 'string',
+      ukField: 'seoTitle',
+    }),
     defineField({
       name: 'seoDescription',
       title: 'SEO Description',
       type: 'text',
       rows: 3,
       description: 'Мета-опис сторінки товару.',
+    }),
+    defineRuField({
+      name: 'seoDescriptionRu',
+      title: 'SEO Description (RU)',
+      type: 'text',
+      rows: 3,
+      ukField: 'seoDescription',
     }),
     defineField({
       name: 'seoImage',
@@ -43,6 +69,12 @@ export const item = defineType({
           title: 'Alt-текст',
           type: 'string',
           description: 'Опис зображення українською мовою.',
+        }),
+        defineRuField({
+          name: 'altRu',
+          title: 'Alt-текст (RU)',
+          type: 'string',
+          ukField: 'alt',
         }),
       ],
     }),
@@ -74,6 +106,12 @@ export const item = defineType({
               title: 'Назва кольору',
               type: 'string',
               validation: (rule) => rule.required(),
+            }),
+            defineRuField({
+              name: 'colorRu',
+              title: 'Назва кольору (RU)',
+              type: 'string',
+              ukField: 'color',
             }),
             defineField({
               name: 'colorset',
@@ -107,6 +145,12 @@ export const item = defineType({
                       type: 'string',
                       description: 'Опис фото українською мовою.',
                     }),
+                    defineRuField({
+                      name: 'altRu',
+                      title: 'Alt-текст (RU)',
+                      type: 'string',
+                      ukField: 'alt',
+                    }),
                   ],
                 }),
               ],
@@ -135,6 +179,13 @@ export const item = defineType({
       type: 'text',
       rows: 4,
       description: 'Короткий опис товару українською мовою.',
+    }),
+    defineRuField({
+      name: 'descriptionRu',
+      title: 'Опис (RU)',
+      type: 'text',
+      rows: 4,
+      ukField: 'description',
     }),
     defineField({
       name: 'manual',
@@ -210,6 +261,16 @@ export const item = defineType({
       description: 'Пояснення для користувача, якщо товар доступний лише по передзамовленню.',
       hidden: ({parent}) => Boolean(parent?.outOfStock) || !parent?.preorder,
     }),
+    {
+      ...defineRuField({
+        name: 'preordertextRu',
+        title: 'Текст передзамовлення (RU)',
+        type: 'string',
+        ukField: 'preordertext',
+      }),
+      hidden: ({parent}: {parent?: {outOfStock?: boolean; preorder?: boolean}}) =>
+        Boolean(parent?.outOfStock) || !parent?.preorder,
+    },
     defineField({
       name: 'outOfStock',
       title: 'Немає в наявності',
@@ -234,11 +295,23 @@ export const item = defineType({
               type: 'string',
               validation: (rule) => rule.required(),
             }),
+            defineRuField({
+              name: 'nameRu',
+              title: 'Назва (RU)',
+              type: 'string',
+              ukField: 'name',
+            }),
             defineField({
               name: 'char',
               title: 'Значення',
               type: 'string',
               validation: (rule) => rule.required(),
+            }),
+            defineRuField({
+              name: 'charRu',
+              title: 'Значення (RU)',
+              type: 'string',
+              ukField: 'char',
             }),
           ],
         }),
@@ -260,6 +333,12 @@ export const item = defineType({
               type: 'string',
               validation: (rule) => rule.required(),
             }),
+            defineRuField({
+              name: 'nameRu',
+              title: 'Назва (RU)',
+              type: 'string',
+              ukField: 'name',
+            }),
             defineField({
               name: 'icon',
               title: 'Іконка',
@@ -271,6 +350,12 @@ export const item = defineType({
                   title: 'Alt-текст',
                   type: 'string',
                   description: 'Опис іконки українською мовою.',
+                }),
+                defineRuField({
+                  name: 'altRu',
+                  title: 'Alt-текст (RU)',
+                  type: 'string',
+                  ukField: 'alt',
                 }),
               ],
             }),
