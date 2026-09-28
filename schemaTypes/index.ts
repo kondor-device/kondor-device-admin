@@ -1,6 +1,7 @@
 import {badge} from './badge'
 import {category} from './category'
 import {item} from './item'
+import {review} from './review'
 import {promocode} from './promocode'
 import {blogPost} from './blogPost'
 import {blogAuthor} from './blogAuthor'
@@ -14,6 +15,7 @@ export const schemaTypes = [
   badge,
   category,
   item,
+  review,
   promocode,
   // blog documents
   blogPost,
