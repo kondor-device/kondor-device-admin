@@ -57,8 +57,9 @@ export const category = defineType({
       name: 'items',
       title: 'Товари в категорії',
       type: 'array',
-      of: [{type: 'reference', to: [{type: 'item'}]}],
-      description: 'Перелік товарів, що належать до цієї категорії.',
+      of: [{type: 'reference', to: [{type: 'item'}, {type: 'bundle'}]}],
+      description:
+        'Перелік товарів, що належать до цієї категорії. У категорію «Сети» (slug: sets) додаються сети.',
     }),
   ],
   preview: {
