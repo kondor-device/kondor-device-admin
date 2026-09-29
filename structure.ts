@@ -1,7 +1,7 @@
 import type {StructureBuilder, StructureResolver} from 'sanity/structure'
 
 // Типи, що не мають окремого пункту меню, крім груп нижче (щоб не дублювались у загальному списку)
-const HIDDEN_TYPES = ['blogPost', 'blogAuthor', 'blogPage', 'review']
+const HIDDEN_TYPES = ['review']
 
 const reviewList = (S: StructureBuilder, title: string, status: string) =>
   S.listItem()
@@ -32,36 +32,6 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
               reviewList(S, 'На модерації', 'pending'),
               reviewList(S, 'Схвалені', 'approved'),
               reviewList(S, 'Відхилені', 'rejected'),
-            ]),
-        ),
-      S.listItem()
-        .title('📰 Блог')
-        .child(
-          S.list()
-            .title('Блог')
-            .items([
-              S.listItem()
-                .title('Статті')
-                .child(
-                  S.documentTypeList('blogPost')
-                    .title('Статті блогу')
-                    .defaultOrdering([{field: 'publishedAt', direction: 'desc'}]),
-                ),
-              S.listItem()
-                .title('Автори')
-                .child(
-                  S.documentTypeList('blogAuthor')
-                    .title('Автори блогу')
-                    .defaultOrdering([{field: 'name', direction: 'asc'}]),
-                ),
-              S.listItem()
-                .title('Сторінка «Блог» (SEO)')
-                .child(
-                  S.document()
-                    .schemaType('blogPage')
-                    .documentId('blogPage')
-                    .title('Сторінка «Блог»'),
-                ),
             ]),
         ),
     ])
