@@ -171,6 +171,34 @@ export const bundle = defineType({
       ],
     }),
     defineField({
+      name: 'photos',
+      title: 'Фото сету',
+      type: 'array',
+      description:
+        'Необов’язково. На сайті ці фото йдуть першими (галерея сету, картка в каталозі та на головній), далі фото окремих товарів сету.',
+      of: [
+        defineArrayMember({
+          title: 'Фото',
+          type: 'image',
+          options: {hotspot: true},
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alt-текст',
+              type: 'string',
+              description: 'Опис фото українською мовою.',
+            }),
+            defineRuField({
+              name: 'altRu',
+              title: 'Alt-текст (RU)',
+              type: 'string',
+              ukField: 'alt',
+            }),
+          ],
+        }),
+      ],
+    }),
+    defineField({
       name: 'description',
       title: 'Опис',
       type: 'text',
