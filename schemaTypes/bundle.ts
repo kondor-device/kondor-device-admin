@@ -213,6 +213,14 @@ export const bundle = defineType({
       ukField: 'description',
     }),
     defineField({
+      name: 'outOfStock',
+      title: 'Немає в наявності',
+      type: 'boolean',
+      description:
+        'Увімкніть, якщо сету немає в наявності. Сет лишається на сайті зі статусом «Немає в наявності», кнопка замовлення стає недоступною (як у товару). Це окремо від автоматичного приховування: якщо хоча б одного товару сету немає в наявності, сет зникає з сайту сам.',
+      initialValue: false,
+    }),
+    defineField({
       name: 'includeInFeed',
       title: 'Включити у товарні фіди',
       type: 'boolean',
