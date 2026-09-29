@@ -68,7 +68,24 @@ export const bundle = defineType({
               title: 'Товар',
               type: 'reference',
               to: [{type: 'item'}],
-              validation: (rule) => rule.required(),
+              description:
+                'Лише справжні товари. Службові «товари» для посилань на головній сторінці (увімкнено «Показувати на головній») недоступні.',
+              // Items with showonmain are banners for the home page, not products
+              options: {filter: 'showonmain != true'},
+              validation: (rule) =>
+                rule.required().custom(async (value, context) => {
+                  if (!value?._ref) return true
+
+                  const client = context.getClient({apiVersion: '2024-01-01'})
+                  const banner = await client.fetch<boolean>(
+                    `coalesce(*[_id == "drafts." + $id][0].showonmain, *[_id == $id][0].showonmain, false)`,
+                    {id: value._ref},
+                  )
+
+                  return banner
+                    ? 'Це службовий елемент для головної сторінки, а не товар. Оберіть справжній товар'
+                    : true
+                }),
             }),
             defineField({
               name: 'colorCode',
