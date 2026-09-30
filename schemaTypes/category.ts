@@ -61,6 +61,13 @@ export const category = defineType({
       description:
         'Перелік товарів, що належать до цієї категорії. У категорію «Сети» (slug: sets) додаються сети.',
     }),
+    defineField({
+      name: 'seo',
+      title: 'SEO блок',
+      type: 'seoSettings',
+      options: {collapsible: true, collapsed: true},
+      description: 'Мета-теги сторінки категорії. Якщо порожньо — сайт згенерує їх із назви.',
+    }),
   ],
   preview: {
     select: {

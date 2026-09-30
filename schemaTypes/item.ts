@@ -1,10 +1,12 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {defineRuField} from './ruField'
+import {seoFieldsets} from './seoFieldset'
 
 export const item = defineType({
   name: 'item',
   title: 'Товар',
   type: 'document',
+  fieldsets: seoFieldsets,
   fields: [
     defineField({
       name: 'generalname',
@@ -30,53 +32,6 @@ export const item = defineType({
       title: 'Назва товару (RU)',
       type: 'string',
       ukField: 'name',
-    }),
-    defineField({
-      name: 'seoTitle',
-      title: 'SEO Title',
-      type: 'string',
-      description: 'Мета-заголовок для сторінки товару.',
-    }),
-    defineRuField({
-      name: 'seoTitleRu',
-      title: 'SEO Title (RU)',
-      type: 'string',
-      ukField: 'seoTitle',
-    }),
-    defineField({
-      name: 'seoDescription',
-      title: 'SEO Description',
-      type: 'text',
-      rows: 3,
-      description: 'Мета-опис сторінки товару.',
-    }),
-    defineRuField({
-      name: 'seoDescriptionRu',
-      title: 'SEO Description (RU)',
-      type: 'text',
-      rows: 3,
-      ukField: 'seoDescription',
-    }),
-    defineField({
-      name: 'seoImage',
-      title: 'SEO Зображення',
-      type: 'image',
-      description: 'Зображення для Open Graph. Використовуйте alt та url так само, як у Dato CMS.',
-      options: {hotspot: true},
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt-текст',
-          type: 'string',
-          description: 'Опис зображення українською мовою.',
-        }),
-        defineRuField({
-          name: 'altRu',
-          title: 'Alt-текст (RU)',
-          type: 'string',
-          ukField: 'alt',
-        }),
-      ],
     }),
     defineField({
       name: 'slug',
@@ -369,6 +324,58 @@ export const item = defineType({
       type: 'reference',
       to: [{type: 'category'}],
       description: 'Основна категорія, до якої належить товар.',
+    }),
+    defineField({
+      name: 'seoTitle',
+      fieldset: 'seo',
+      title: 'SEO Title',
+      type: 'string',
+      description: 'Мета-заголовок для сторінки товару.',
+    }),
+    defineRuField({
+      name: 'seoTitleRu',
+      fieldset: 'seo',
+      title: 'SEO Title (RU)',
+      type: 'string',
+      ukField: 'seoTitle',
+    }),
+    defineField({
+      name: 'seoDescription',
+      fieldset: 'seo',
+      title: 'SEO Description',
+      type: 'text',
+      rows: 3,
+      description: 'Мета-опис сторінки товару.',
+    }),
+    defineRuField({
+      name: 'seoDescriptionRu',
+      fieldset: 'seo',
+      title: 'SEO Description (RU)',
+      type: 'text',
+      rows: 3,
+      ukField: 'seoDescription',
+    }),
+    defineField({
+      name: 'seoImage',
+      fieldset: 'seo',
+      title: 'SEO Зображення',
+      type: 'image',
+      description: 'Зображення для Open Graph. Використовуйте alt та url так само, як у Dato CMS.',
+      options: {hotspot: true},
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt-текст',
+          type: 'string',
+          description: 'Опис зображення українською мовою.',
+        }),
+        defineRuField({
+          name: 'altRu',
+          title: 'Alt-текст (RU)',
+          type: 'string',
+          ukField: 'alt',
+        }),
+      ],
     }),
   ],
   preview: {
