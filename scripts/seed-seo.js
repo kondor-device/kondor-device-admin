@@ -1,6 +1,7 @@
 /**
  * Fill empty SEO fields of categories and products with a basic template.
  * Existing values are never overwritten: only empty fields are set.
+ * Products with "show on main page" enabled are skipped: they are tiles, not pages.
  *
  * Dry run (default, writes nothing):
  *   npx sanity exec scripts/seed-seo.js
@@ -49,16 +50,10 @@ function fit(preferred, fallback, max) {
 function itemSeo(item, lang) {
   const t = TEXT[lang]
   const ru = lang === 'ru'
-  // Placeholder products (old "Заставка …" hero tiles) have no usable name of their own:
-  // describe them by their category instead
-  const isPlaceholder = /заставка/i.test(clean(item.generalname))
-  const base =
-    isPlaceholder && item.cat
-      ? clean(ru ? item.cat.nameRu || item.cat.name : item.cat.name)
-      : productName(
-          ru ? item.generalnameRu || item.generalname : item.generalname,
-          ru ? item.nameRu || item.name : item.name,
-        )
+  const base = productName(
+    ru ? item.generalnameRu || item.generalname : item.generalname,
+    ru ? item.nameRu || item.name : item.name,
+  )
   return {
     title: fit(`${base} ${t.suffix}`, base, LIMITS.title),
     description: fit(`${base} ${t.from}. ${t.perks}`, `${base} ${t.from}.`, LIMITS.description),
@@ -80,10 +75,9 @@ function categorySeo(category, lang) {
 
 async function main() {
   const [items, categories, drafts] = await Promise.all([
-    client.fetch(`*[_type == "item"]{
+    client.fetch(`*[_type == "item" && showonmain != true]{
       _id, generalname, generalnameRu, name, nameRu,
-      seoTitle, seoTitleRu, seoDescription, seoDescriptionRu,
-      "cat": cat->{name, nameRu}
+      seoTitle, seoTitleRu, seoDescription, seoDescriptionRu
     } | order(name asc)`),
     client.fetch(`*[_type == "category"]{_id, name, nameRu, seo} | order(pos asc)`),
     client.fetch(`count(*[_id in path("drafts.**") && _type in ["item", "category"]])`),
