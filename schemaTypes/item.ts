@@ -236,7 +236,7 @@ export const item = defineType({
     }),
     defineField({
       name: 'showInFeed',
-      title: 'Показувати в фіді Мета, Розетка, Гугл',
+      title: 'Показувати в фіді Meta, Rozetka, Google',
       type: 'boolean',
       description:
         'Так: товар (усі його кольори) потрапляє у товарні фіди Meta, Rozetka і Google. Ні: у фіді його немає.',
