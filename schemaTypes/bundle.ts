@@ -223,11 +223,11 @@ export const bundle = defineType({
       initialValue: false,
     }),
     defineField({
-      name: 'includeInFeed',
-      title: 'Включити у товарні фіди',
+      name: 'showInFeed',
+      title: 'Показувати в фіді Meta, Rozetka, Google',
       type: 'boolean',
       description:
-        'Google, Meta, Rozetka. Поки вимкнено: використання цього поля додасться пізніше.',
+        'Так: сет потрапляє у товарні фіди Meta, Rozetka і Google. Ні: у фіді його немає. Сет, у якого хоча б одного компонента немає в наявності, у фід не потрапляє в будь-якому разі.',
       initialValue: false,
     }),
     defineField({
