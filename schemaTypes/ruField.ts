@@ -10,6 +10,7 @@ type RuFieldOptions = {
   description?: string
   // soft limit: shows a warning (does not block publishing)
   maxLength?: number
+  fieldset?: string
 }
 
 const isFilled = (value: unknown) => typeof value === 'string' && value.trim().length > 0
@@ -24,12 +25,14 @@ export const defineRuField = ({
   rows,
   description,
   maxLength,
+  fieldset,
 }: RuFieldOptions) =>
   defineField({
     name,
     title,
     type,
     ...(rows ? {rows} : {}),
+    ...(fieldset ? {fieldset} : {}),
     description: description ?? 'Російська версія. Обов’язкова, якщо заповнена українська.',
     validation: (rule) => [
       rule.custom((value, context) => {

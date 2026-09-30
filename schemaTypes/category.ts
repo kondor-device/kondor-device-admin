@@ -54,18 +54,19 @@ export const category = defineType({
       ],
     }),
     defineField({
-      name: 'seo',
-      title: 'SEO блок',
-      type: 'seoSettings',
-      description: 'Мета-теги сторінки категорії. Якщо порожньо — сайт згенерує їх із назви.',
-    }),
-    defineField({
       name: 'items',
       title: 'Товари в категорії',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'item'}, {type: 'bundle'}]}],
       description:
         'Перелік товарів, що належать до цієї категорії. У категорію «Сети» (slug: sets) додаються сети.',
+    }),
+    defineField({
+      name: 'seo',
+      title: 'SEO блок',
+      type: 'seoSettings',
+      options: {collapsible: true, collapsed: true},
+      description: 'Мета-теги сторінки категорії. Якщо порожньо — сайт згенерує їх із назви.',
     }),
   ],
   preview: {

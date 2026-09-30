@@ -1,6 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {BundleColorInput} from './bundleColorInput'
 import {defineRuField} from './ruField'
+import {seoFieldsets} from './seoFieldset'
 
 type BundleComponentValue = {item?: {_ref?: string}; colorCode?: string}
 
@@ -15,6 +16,7 @@ export const bundle = defineType({
   type: 'document',
   description:
     'Набір із 2–3 товарів фіксованої комплектації (з конкретними кольорами) за спільною ціною. Показується в категорії «Сети». Якщо хоча б одного компонента немає в наявності, сет зникає з сайту.',
+  fieldsets: seoFieldsets,
   fields: [
     defineField({
       name: 'name',
@@ -230,18 +232,21 @@ export const bundle = defineType({
     }),
     defineField({
       name: 'seoTitle',
+      fieldset: 'seo',
       title: 'SEO Title',
       type: 'string',
       description: 'Мета-заголовок для сторінки сету.',
     }),
     defineRuField({
       name: 'seoTitleRu',
+      fieldset: 'seo',
       title: 'SEO Title (RU)',
       type: 'string',
       ukField: 'seoTitle',
     }),
     defineField({
       name: 'seoDescription',
+      fieldset: 'seo',
       title: 'SEO Description',
       type: 'text',
       rows: 3,
@@ -249,6 +254,7 @@ export const bundle = defineType({
     }),
     defineRuField({
       name: 'seoDescriptionRu',
+      fieldset: 'seo',
       title: 'SEO Description (RU)',
       type: 'text',
       rows: 3,
@@ -256,6 +262,7 @@ export const bundle = defineType({
     }),
     defineField({
       name: 'seoImage',
+      fieldset: 'seo',
       title: 'SEO Зображення',
       type: 'image',
       description: 'Зображення для Open Graph. Якщо порожньо, береться фото першого компонента.',
