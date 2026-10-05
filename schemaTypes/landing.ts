@@ -183,7 +183,8 @@ export const landing = defineField({
     ]),
     section('banner', '6. Фото на всю ширину', [imageField('image', 'Фото')]),
     textBlock('textBlock3', '7. Текстовий блок'),
-    section('faq', '8. Питання та відповіді', [
+    textBlock('textBlock4', '8. Текстовий блок'),
+    section('faq', '9. Питання та відповіді', [
       defineField({
         name: 'items',
         title: 'Питання',
