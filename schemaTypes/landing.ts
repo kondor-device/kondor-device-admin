@@ -162,8 +162,14 @@ export const landing = defineField({
         defineField({name: 'model', title: 'Назва моделі', type: 'string'}),
         ...textFields('description', 'Опис моделі', 'text', {rows: 3}),
         imageField('image', 'Фото товару'),
-        colorField('gradientFrom', 'Градієнт: початок'),
-        colorField('gradientTo', 'Градієнт: кінець'),
+        colorField(
+          'gradientColor1',
+          'Градієнт: колір 1',
+          'Градієнт шапки складається з 4 кольорів, формула на сайті стала. Колір 1 найтемніший (початок).',
+        ),
+        colorField('gradientColor2', 'Градієнт: колір 2'),
+        colorField('gradientColor3', 'Градієнт: колір 3'),
+        colorField('gradientColor4', 'Градієнт: колір 4', 'Найсвітліший колір (кінець).'),
         defineField({
           name: 'badges',
           title: 'Характеристики',
@@ -207,7 +213,8 @@ export const landing = defineField({
               name: 'framed',
               title: 'Фото в рамці',
               type: 'boolean',
-              description: 'Фото із заокругленими кутами, ширше за звичайне (напр. скріншот програми).',
+              description:
+                'Фото із заокругленими кутами, ширше за звичайне (напр. скріншот програми).',
               initialValue: false,
             }),
             defineField({
