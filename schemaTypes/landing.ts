@@ -148,51 +148,15 @@ export const landing = defineField({
   fields: [
     defineField({
       name: 'hero',
-      title: 'Шапка (градієнт)',
+      title: 'Шапка',
       type: 'object',
-      description: 'Завжди перша на лендінгу.',
       options: {collapsible: true, collapsed: true},
       fields: [
-        defineField({
-          name: 'label',
-          title: 'Тип товару',
-          type: 'string',
-          description: 'Напис у куті шапки, наприклад Keyboard або Mouse.',
-        }),
-        defineField({name: 'model', title: 'Назва моделі', type: 'string'}),
-        ...textFields('description', 'Опис моделі', 'text', {rows: 3}),
-        imageField('image', 'Фото товару'),
-        colorField(
-          'gradientColor1',
-          'Градієнт: колір 1',
-          'Градієнт шапки складається з 4 кольорів, формула на сайті стала. Колір 1 найтемніший (початок).',
+        imageField(
+          'image',
+          'Зображення шапки',
+          'Вся шапка (фон, лого, назва, фото, характеристики) — одна картинка. Завжди перша на лендінгу.',
         ),
-        colorField('gradientColor2', 'Градієнт: колір 2'),
-        colorField('gradientColor3', 'Градієнт: колір 3'),
-        colorField('gradientColor4', 'Градієнт: колір 4', 'Найсвітліший колір (кінець).'),
-        defineField({
-          name: 'badges',
-          title: 'Характеристики',
-          type: 'array',
-          validation: (rule) => rule.max(3).warning('У макеті не більше 3 характеристик'),
-          of: [
-            defineArrayMember({
-              name: 'heroBadge',
-              title: 'Характеристика',
-              type: 'object',
-              fields: [
-                defineField({
-                  name: 'badge',
-                  title: 'Бейдж',
-                  type: 'string',
-                  description: 'Значення на бейджі, наприклад «1000 Гц».',
-                }),
-                ...textFields('text', 'Опис'),
-              ],
-              preview: {select: {title: 'badge', subtitle: 'text'}},
-            }),
-          ],
-        }),
       ],
     }),
     defineField({
