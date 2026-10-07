@@ -235,8 +235,21 @@ export const landing = defineField({
           'Градієнтна смуга',
           'Смуга з 1–2 білими бейджами.',
           [
-            colorField('gradientFrom', 'Градієнт: початок'),
-            colorField('gradientTo', 'Градієнт: кінець'),
+            ...Array.from({length: 9}, (_, index) =>
+              colorField(
+                `gradientColor${index + 1}`,
+                `Градієнт: колір ${index + 1}`,
+                index === 0
+                  ? 'Градієнт смуги з 9 кольорів (позиції кольорів і кут задані на сайті). Якщо заповнено хоча б один колір, двоколірний варіант нижче не використовується.'
+                  : undefined,
+              ),
+            ),
+            colorField(
+              'gradientFrom',
+              'Двоколірний градієнт: початок',
+              'Старий варіант. Використовується, лише якщо не заповнено жодного з 9 кольорів вище.',
+            ),
+            colorField('gradientTo', 'Двоколірний градієнт: кінець'),
             defineField({
               name: 'badges',
               title: 'Бейджі',
