@@ -170,6 +170,18 @@ export const landing = defineField({
         colorField('gradientColor2', 'Градієнт фону: колір 2'),
         colorField('gradientColor3', 'Градієнт фону: колір 3'),
         colorField('gradientColor4', 'Градієнт фону: колір 4', 'Найсвітліший колір (кінець).'),
+        colorField(
+          'mobileGradientColor1',
+          'Градієнт фону (мобільний): колір 1',
+          'Необов’язково. Окремий градієнт для екранів вужче 640 px, формула на сайті стала. Колір 1 найтемніший. Якщо не заповнено, на мобільному буде градієнт для десктопа.',
+        ),
+        colorField('mobileGradientColor2', 'Градієнт фону (мобільний): колір 2'),
+        colorField('mobileGradientColor3', 'Градієнт фону (мобільний): колір 3'),
+        colorField(
+          'mobileGradientColor4',
+          'Градієнт фону (мобільний): колір 4',
+          'Найсвітліший колір (кінець).',
+        ),
       ],
     }),
     defineField({
