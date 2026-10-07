@@ -15,6 +15,14 @@ const colorField = (name: string, title: string, description?: string) =>
     ...(description ? {description} : {}),
   })
 
+const numberField = (name: string, title: string, description?: string) =>
+  defineField({
+    name,
+    title,
+    type: 'number',
+    ...(description ? {description} : {}),
+  })
+
 const imageField = (name: string, title: string, description?: string) =>
   defineField({
     name,
@@ -244,6 +252,16 @@ export const landing = defineField({
                   : undefined,
               ),
             ),
+            ...Array.from({length: 9}, (_, index) =>
+              numberField(
+                `gradientPosition${index + 1}`,
+                `Градієнт: позиція кольору ${index + 1}, %`,
+                index === 0
+                  ? 'Необов’язково. Позиція кольору на лінії градієнта (може бути від’ємною або понад 100). Порожнє — значення з першого макета.'
+                  : undefined,
+              ),
+            ),
+            numberField('gradientAngle', 'Градієнт: кут, °', 'Необов’язково. Порожнє — 89,64°.'),
             colorField(
               'gradientFrom',
               'Двоколірний градієнт: початок',
@@ -320,6 +338,21 @@ export const landing = defineField({
               'Фон на всю ширину екрана, формула градієнта на сайті стала. Колір 1 — темніший (початок).',
             ),
             colorField('gradientTo', 'Градієнт фону: колір 2', 'Світліший колір (кінець).'),
+            numberField(
+              'gradientAngle',
+              'Градієнт фону: кут, °',
+              'Необов’язково. Порожнє — 119,61°.',
+            ),
+            numberField(
+              'gradientFromPosition',
+              'Градієнт фону: позиція кольору 1, %',
+              'Необов’язково. Порожнє — 47,56.',
+            ),
+            numberField(
+              'gradientToPosition',
+              'Градієнт фону: позиція кольору 2, %',
+              'Необов’язково. Порожнє — 128,27.',
+            ),
           ],
           {
             select: {media: 'image'},
