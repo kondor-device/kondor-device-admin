@@ -1,5 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {defineRuField} from './ruField'
+import {landing} from './landing'
 import {seoFieldsets} from './seoFieldset'
 
 export const item = defineType({
@@ -333,6 +334,7 @@ export const item = defineType({
       to: [{type: 'category'}],
       description: 'Основна категорія, до якої належить товар.',
     }),
+    landing,
     defineField({
       name: 'seoTitle',
       fieldset: 'seo',
