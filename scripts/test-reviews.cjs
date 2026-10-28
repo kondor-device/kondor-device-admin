@@ -41,6 +41,26 @@ const now = '2026-10-28T12:00:00Z'
 const make = (record, action, edits, audit) =>
   plan(record, action, editor, 'reviewAudit.unique-test', now, edits, audit)
 const plain = (value) => JSON.parse(JSON.stringify(value))
+
+test('moderation preserves photos and removing one is reversible', () => {
+  const photos = ['one', 'two', 'three'].map(_key => ({_key, _type: 'image', asset: {_type: 'reference', _ref: `image-${_key}-200x100-webp`}}))
+  const record = {...source, photos}
+  assert.deepEqual(plain(make(record, 'hide').audit.after.photos), photos)
+  const edited = make(record, 'publish', {text: source.text, replyText: source.reply.text, photoKeys: ['one', 'three']})
+  assert.equal(edited.audit.before.photos.length, 3)
+  assert.equal(edited.audit.after.photos.length, 2)
+  const undone = make({...record, ...edited.audit.after}, 'undo', undefined, edited.audit)
+  assert.equal(undone.audit.after.photos.length, 3)
+  assert.throws(() => make(record, 'publish', {text: source.text, replyText: '', photoKeys: ['foreign']}))
+})
+
+test('removing all photos unsets the field and undo restores them', () => {
+  const photos = [{_key: 'one', _type: 'image', asset: {_type: 'reference', _ref: 'image-one-200x100-webp'}}]
+  const edited = make({...source, photos}, 'publish', {text: source.text, replyText: source.reply.text, photoKeys: []})
+  assert.ok(edited.mutations[1].patch.unset.includes('photos'))
+  const undo = make({...source, photos: undefined}, 'undo', undefined, edited.audit)
+  assert.equal(undo.audit.after.photos.length, 1)
+})
 test('hide preserves original text and uses an atomic revision guard and private audit', () => {
   const result = make(source, 'hide')
   assert.equal(result.audit.before.text, source.text)

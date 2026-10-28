@@ -69,6 +69,7 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
   })
   const [text, setText] = useState('')
   const [reply, setReply] = useState('')
+  const [photoKeys, setPhotoKeys] = useState<string[]>([])
   const [busy, setBusy] = useState(false)
   const [confirmUndo, setConfirmUndo] = useState(false)
   const [detailLoading, setDetailLoading] = useState(false)
@@ -76,7 +77,12 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
   const [notice, setNotice] = useState('')
   const [retryAudit, setRetryAudit] = useState<string | null>(null)
   const detailRequest = useRef(0)
-  const dirty = !!review && (text !== review.text || reply !== (review.reply?.text ?? ''))
+  const dirty =
+    !!review &&
+    (text !== review.text ||
+      reply !== (review.reply?.text ?? '') ||
+      JSON.stringify(photoKeys) !==
+        JSON.stringify((review.photos || []).map((photo) => photo._key)))
   const canLeave = () => !dirty || window.confirm('Є незбережені зміни. Закрити їх без публікації?')
   useEffect(() => {
     if (initialItemId !== itemId) {
@@ -159,6 +165,7 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
         setReview(doc)
         setText(doc.text)
         setReply(doc.reply?.text ?? '')
+        setPhotoKeys((doc.photos || []).map((photo) => photo._key))
         setHistory(audit)
       } catch {
         if (request === detailRequest.current)
@@ -205,7 +212,7 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
         review,
         action,
         editor,
-        action === 'publish' ? {text, replyText: reply} : undefined,
+        action === 'publish' ? {text, replyText: reply, photoKeys} : undefined,
         history.recent[0],
       )
       setConfirmUndo(false)
@@ -428,6 +435,65 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
               />
 
               <small>Порожнє поле прибере відповідь після публікації.</small>
+              {!!review.photos?.length && (
+                <fieldset disabled={busy || !editor}>
+                  <legend>Фотографії покупця</legend>
+                  <p>
+                    Зніміть позначку, щоб прибрати фото під час публікації. Зміна зберігається в
+                    історії.
+                  </p>
+                  <div style={{display: 'flex', flexWrap: 'wrap', gap: 12}}>
+                    {review.photos.map((photo, index) => {
+                      const match = photo.asset?._ref.match(
+                        /^image-([a-zA-Z0-9]+)-(\d+x\d+)-(jpg|jpeg|png|webp)$/,
+                      )
+                      const url = match
+                        ? `https://cdn.sanity.io/images/qmszlzqu/production/${match[1]}-${match[2]}.${match[3]}?w=220&h=160&fit=crop&auto=format`
+                        : ''
+                      return (
+                        <label key={photo._key} style={{margin: 0}}>
+                          {url ? (
+                            <a
+                              href={url.replace('w=220&h=160&fit=crop', 'w=1400&fit=max')}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <img
+                                src={url}
+                                alt={`Фото ${index + 1} до відгуку`}
+                                width={110}
+                                height={80}
+                                style={{
+                                  objectFit: 'cover',
+                                  opacity: photoKeys.includes(photo._key) ? 1 : 0.35,
+                                }}
+                              />
+                            </a>
+                          ) : null}
+                          <span>
+                            <input
+                              type="checkbox"
+                              style={{width: 'auto'}}
+                              checked={photoKeys.includes(photo._key)}
+                              onChange={(event) => {
+                                const next = event.target.checked
+                                  ? [...photoKeys, photo._key]
+                                  : photoKeys.filter((key) => key !== photo._key)
+                                setPhotoKeys(
+                                  (review.photos || [])
+                                    .filter((p) => next.includes(p._key))
+                                    .map((p) => p._key),
+                                )
+                              }}
+                            />{' '}
+                            Залишити фото {index + 1}
+                          </span>
+                        </label>
+                      )
+                    })}
+                  </div>
+                </fieldset>
+              )}
               <Buttons>
                 <button
                   data-primary="true"
@@ -481,6 +547,7 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
                     </p>
                     <small>
                       {labels[a.before.status]} → {labels[a.after.status]}
+                      {' · '}Фото: {a.before.photos?.length || 0} → {a.after.photos?.length || 0}
                     </small>
                     <details>
                       <summary>Текст до зміни</summary>

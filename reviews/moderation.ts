@@ -8,6 +8,12 @@ export interface ReviewReply {
   publishedAt?: string
   [key: string]: unknown
 }
+export interface ReviewPhoto {
+  _key: string
+  _type: 'image'
+  asset: {_type: 'reference'; _ref: string}
+  url?: string
+}
 export interface ReviewRecord {
   _id: string
   _type: 'review'
@@ -21,6 +27,7 @@ export interface ReviewRecord {
   submittedAt: string
   reply?: ReviewReply | null
   itemName?: string
+  photos?: ReviewPhoto[]
 }
 export interface EditorIdentity {
   id: string
@@ -30,6 +37,7 @@ export interface ReviewState {
   text: string
   status: ReviewStatus
   reply: ReviewReply | null
+  photos?: ReviewPhoto[]
 }
 export interface ReviewAudit {
   _id: string
@@ -49,11 +57,12 @@ export class ReviewConflictError extends Error {
   }
 }
 export const reviewState = (
-  review: Pick<ReviewRecord, 'text' | 'status' | 'reply'>,
+  review: Pick<ReviewRecord, 'text' | 'status' | 'reply' | 'photos'>,
 ): ReviewState => ({
   text: review.text,
   status: review.status,
   reply: review.reply ?? null,
+  ...(review.photos?.length ? {photos: review.photos} : {}),
 })
 const canonical = (value: unknown): string =>
   JSON.stringify(value, (_key, item) =>
@@ -71,7 +80,7 @@ export function buildModerationPlan(
   editor: EditorIdentity,
   auditId: string,
   changedAt: string,
-  edits?: {text: string; replyText: string},
+  edits?: {text: string; replyText: string; photoKeys?: string[]},
   undoAudit?: ReviewAudit,
 ) {
   if (current._type !== 'review' || !/^[a-zA-Z0-9_-]{1,128}$/.test(current._id) || !current._rev)
@@ -96,6 +105,19 @@ export function buildModerationPlan(
             ? current.reply
             : {...current.reply, text: replyText, publishedAt: changedAt}) ?? null)
         : null,
+      ...(before.photos?.length ? {photos: before.photos} : {}),
+    }
+    if (edits?.photoKeys) {
+      const allowed = new Set((current.photos || []).map((photo) => photo._key))
+      if (
+        edits.photoKeys.length > 3 ||
+        new Set(edits.photoKeys).size !== edits.photoKeys.length ||
+        edits.photoKeys.some((key) => !allowed.has(key))
+      )
+        throw new Error('Можна залишити лише фотографії цього відгуку')
+      const kept = (current.photos || []).filter((photo) => edits.photoKeys!.includes(photo._key))
+      if (kept.length) after.photos = kept
+      else delete after.photos
     }
   } else if (action === 'hide') {
     if (current.status !== 'approved') throw new Error('Сховати можна лише опублікований відгук')
@@ -133,6 +155,11 @@ export function buildModerationPlan(
   }
   const set: Record<string, unknown> = {text: after.text, status: after.status}
   if (after.reply) set.reply = after.reply
+  if (after.photos?.length) set.photos = after.photos
+  const unset = [
+    ...(!after.reply ? ['reply'] : []),
+    ...(before.photos?.length && !after.photos?.length ? ['photos'] : []),
+  ]
   return {
     audit,
     mutations: [
@@ -142,7 +169,7 @@ export function buildModerationPlan(
           id: current._id,
           ifRevisionID: current._rev,
           set,
-          ...(!after.reply ? {unset: ['reply']} : {}),
+          ...(unset.length ? {unset} : {}),
         },
       },
     ],
@@ -153,7 +180,7 @@ export async function moderateReview(
   expected: ReviewRecord,
   action: ReviewAction,
   editor: EditorIdentity,
-  edits?: {text: string; replyText: string},
+  edits?: {text: string; replyText: string; photoKeys?: string[]},
   undoAudit?: ReviewAudit,
 ) {
   const config = client.config()
