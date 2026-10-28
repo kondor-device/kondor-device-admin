@@ -394,6 +394,8 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
               <dl>
                 <dt>Товар</dt>
                 <dd>{review.itemName}</dd>
+                <dt>Телефон покупця</dt>
+                <dd>{review.phone || 'Не вказаний'}</dd>
                 <dt>Оцінка покупця</dt>
                 <dd>{review.rating} / 5</dd>
                 <dt>Дата відгуку</dt>

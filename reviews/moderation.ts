@@ -14,6 +14,7 @@ export interface ReviewRecord {
   _rev: string
   item: {_ref: string}
   author: string
+  phone?: string
   rating: number
   text: string
   status: ReviewStatus
