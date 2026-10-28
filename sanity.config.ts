@@ -5,6 +5,7 @@ import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 import {SEO_SINGLETON_TYPES} from './schemaTypes/siteSeoPages'
 import {structure} from './structure'
+import {OpenProductReviews, reviewsTool} from './reviews/tool'
 
 // Actions allowed on the SEO singletons: they can be edited, but not created/duplicated/deleted
 const SINGLETON_ACTIONS = new Set(['publish', 'discardChanges', 'restore'])
@@ -17,6 +18,7 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [structureTool({structure}), visionTool(), colorInput()],
+  tools: (prev) => [...prev, reviewsTool],
 
   schema: {
     types: schemaTypes,
@@ -28,6 +30,8 @@ export default defineConfig({
     actions: (prev, {schemaType}) =>
       SEO_SINGLETON_TYPES.includes(schemaType)
         ? prev.filter(({action}) => action && SINGLETON_ACTIONS.has(action))
-        : prev,
+        : schemaType === 'item'
+          ? [...prev, OpenProductReviews]
+          : prev,
   },
 })

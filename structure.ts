@@ -1,5 +1,6 @@
 import type {StructureBuilder, StructureResolver} from 'sanity/structure'
 import {SEO_SINGLETON_TYPES, SITE_SEO_PAGE_CONFIGS} from './schemaTypes/siteSeoPages'
+import {ReviewsIcon, ReviewsSidebar} from './reviews/tool'
 
 // The usual list of documents, without the SEO singletons (they live in the «SEO» group).
 // «SEO» — SEO settings of the static pages; each one is a single document with a fixed id.
@@ -10,6 +11,11 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
       ...S.documentTypeListItems().filter(
         (item) => !SEO_SINGLETON_TYPES.includes(item.getId() ?? ''),
       ),
+      S.listItem()
+        .id('reviews')
+        .title('Відгуки')
+        .icon(ReviewsIcon)
+        .child(S.component().id('reviews').title('Відгуки').component(ReviewsSidebar)),
       S.divider(),
       S.listItem()
         .title('🔍 SEO сторінок')
