@@ -5,7 +5,7 @@ export const Shell = styled.div`
   overflow: auto;
   padding: 24px;
   box-sizing: border-box;
-  font: inherit;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: inherit;
   h1 {
     font-size: 25px;
@@ -140,6 +140,7 @@ export const Panel = styled.section`
   overflow-wrap: anywhere;
   label {
     margin-top: 18px;
+    margin-bottom: 8px;
   }
   dl {
     font-size: 14px;
@@ -164,7 +165,9 @@ export const Panel = styled.section`
 `
 export const List = styled.ul`
   list-style: none;
-  padding: 0;
+  max-height: 65vh;
+  overflow-y: auto;
+  padding: 2px;
   margin: 0;
   display: grid;
   gap: 10px;
