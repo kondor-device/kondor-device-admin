@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {useCallback, useEffect, useId, useMemo, useRef, useState} from 'react'
 import {useClient, useCurrentUser} from 'sanity'
 import type {SanityClient} from '@sanity/client'
 import {
@@ -50,6 +50,8 @@ export interface ManagerProps {
 // This component only receives the authenticated Studio client. It has no write token,
 // public mutation endpoint, or access to product/order mutations.
 export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerProps) {
+  const textId = useId()
+  const replyId = useId()
   const [products, setProducts] = useState<Product[]>([])
   const [itemId, setItemId] = useState(initialItemId)
   const [status, setStatus] = useState<keyof typeof labels>('pending')
@@ -68,6 +70,7 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
   const [text, setText] = useState('')
   const [reply, setReply] = useState('')
   const [busy, setBusy] = useState(false)
+  const [confirmUndo, setConfirmUndo] = useState(false)
   const [detailLoading, setDetailLoading] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
@@ -169,6 +172,7 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
     [client],
   )
   useEffect(() => {
+    setConfirmUndo(false)
     if (selected) void loadReview(selected)
     else {
       ++detailRequest.current
@@ -192,11 +196,6 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
       setError('Спочатку опублікуйте зміни тексту або оновіть картку, щоб їх скасувати.')
       return
     }
-    if (
-      action === 'undo' &&
-      !window.confirm('Повернути текст, відповідь і статус до стану перед останньою зміною?')
-    )
-      return
     setBusy(true)
     setError('')
     setNotice('')
@@ -209,6 +208,7 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
         action === 'publish' ? {text, replyText: reply} : undefined,
         history.recent[0],
       )
+      setConfirmUndo(false)
       setNotice('Зміни збережено.')
       setRefresh((n) => n + 1)
       setRetryAudit(audit._id)
@@ -401,30 +401,30 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
                 <dt>Статус</dt>
                 <dd>{labels[review.status] ?? review.status}</dd>
               </dl>
-              <label>
-                Текст відгуку
-                <textarea
-                  rows={7}
-                  maxLength={5000}
-                  value={text}
-                  disabled={busy || !editor}
-                  onChange={(e) => setText(e.target.value)}
-                />
-              </label>
+              <label htmlFor={textId}>Текст відгуку</label>
+              <textarea
+                id={textId}
+                rows={7}
+                maxLength={5000}
+                value={text}
+                disabled={busy || !editor}
+                onChange={(e) => setText(e.target.value)}
+              />
+
               <small>
                 Виправляйте лише формулювання, зберігаючи зміст і оцінку покупця. {text.length} /
                 5000
               </small>
-              <label>
-                Відповідь Kondor
-                <textarea
-                  rows={4}
-                  maxLength={5000}
-                  value={reply}
-                  disabled={busy || !editor}
-                  onChange={(e) => setReply(e.target.value)}
-                />
-              </label>
+              <label htmlFor={replyId}>Відповідь Kondor</label>
+              <textarea
+                id={replyId}
+                rows={4}
+                maxLength={5000}
+                value={reply}
+                disabled={busy || !editor}
+                onChange={(e) => setReply(e.target.value)}
+              />
+
               <small>Порожнє поле прибере відповідь після публікації.</small>
               <Buttons>
                 <button
@@ -492,9 +492,23 @@ export function ReviewManager({client, editor, initialItemId = 'all'}: ManagerPr
                 ))}
                 {!!history.recent.length && (
                   <Buttons>
-                    <button disabled={busy || !editor || dirty} onClick={() => void run('undo')}>
+                    <button
+                      disabled={busy || !editor || dirty}
+                      onClick={() => setConfirmUndo(true)}
+                    >
                       Скасувати останню зміну
                     </button>
+                    {confirmUndo && (
+                      <div role="group" aria-label="Підтвердження скасування">
+                        <p>Повернути текст, відповідь і статус до стану перед останньою зміною?</p>
+                        <button disabled={busy || dirty} onClick={() => void run('undo')}>
+                          Підтвердити скасування
+                        </button>
+                        <button disabled={busy} onClick={() => setConfirmUndo(false)}>
+                          Залишити без змін
+                        </button>
+                      </div>
+                    )}
                   </Buttons>
                 )}
               </details>
